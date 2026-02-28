@@ -1,135 +1,139 @@
-<h1 align="center">iOS Publish Guide</h1>
+<h1 align="center">AppStore Publisher Guide</h1>
 
 <p align="center">
-  <strong>给你的 AI Agent 一键装上 App Store 发布能力</strong>
+  <strong>Give your AI Agent the power to publish apps to the App Store</strong>
 </p>
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge" alt="MIT License"></a>
   <a href="https://github.com/rudrankriyam/App-Store-Connect-CLI"><img src="https://img.shields.io/badge/asc_CLI-v0.35-green.svg?style=for-the-badge" alt="asc CLI"></a>
-  <a href="https://github.com/SDLLL/ios-publish-guide/stargazers"><img src="https://img.shields.io/github/stars/SDLLL/ios-publish-guide?style=for-the-badge" alt="GitHub Stars"></a>
+  <a href="https://github.com/SDLLL/appstore-publisher/stargazers"><img src="https://img.shields.io/github/stars/SDLLL/appstore-publisher?style=for-the-badge" alt="GitHub Stars"></a>
 </p>
 
 <p align="center">
-  <a href="#快速上手">快速开始</a> · <a href="#它能做什么">功能</a> · <a href="#发布流程概览">流程</a> · <a href="#常见问题">FAQ</a>
+  <a href="#quick-start">Quick Start</a> · <a href="#what-it-does">Features</a> · <a href="#workflow-overview">Workflow</a> · <a href="#faq">FAQ</a>
+</p>
+
+<p align="center">
+  <a href="README.md">English</a> | <a href="README_CN.md">中文</a>
 </p>
 
 ---
 
-## 为什么需要这个？
+## Why This Exists
 
-你写完了一个 iOS App，想上架 App Store——然后发现：
+You've built an iOS app and want to ship it to the App Store — then reality hits:
 
-- 📦 "帮我把 App 传到 App Store" → **不会用 xcodebuild 命令行**，只能手动在 Xcode 里点 Archive
-- 📝 "帮我写 App Store 描述和关键词" → **不知道 ASO 怎么做**，关键词随便填了 100 个字符
-- 📸 "帮我生成商店截图" → **手动截图再用 Figma 加框**，一套截图做半天
-- 💰 "帮我设置定价" → **App Store Connect 后台点来点去**，找不到价格点在哪
-- ❌ "提交审核被拒了" → **4.2 功能不足、4.3 同质化**，不知道怎么防，被拒了也不知道怎么办
-- 🔒 "隐私政策、PrivacyInfo.xcprivacy 怎么填" → **每次都要查文档**，生怕漏了什么
+- 📦 "Upload my app to the App Store" → **No idea how to use xcodebuild CLI**, stuck clicking Archive in Xcode
+- 📝 "Write my App Store description and keywords" → **No ASO knowledge**, keywords filled in randomly
+- 📸 "Generate store screenshots" → **Manual screenshots + Figma framing**, half a day per set
+- 💰 "Set up pricing" → **Clicking around App Store Connect**, can't find where price points are
+- ❌ "My app got rejected" → **4.2 minimum functionality, 4.3 spam** — don't know how to prevent or respond
+- 🔒 "How to fill in PrivacyInfo.xcprivacy" → **Checking docs every time**, afraid of missing something
 
-**这些事情每发一个 App 都要重复一遍。**
+**You repeat all of this for every single app.**
 
-**iOS Publish Guide 把这一切变成一句话：**
+**AppStore Publisher Guide turns it into one command:**
 
 ```
-npx skills add SDLLL/ios-publish-guide
+npx skills add SDLLL/appstore-publisher
 ```
 
-安装后告诉你的 AI Agent「帮我发布 App」，它会自动完成从构建到上架的全部流程。
+After installation, tell your AI Agent "publish my app" and it will handle the entire process from build to submission.
 
 ---
 
-## 快速上手
+## Quick Start
 
-复制这行命令，在终端运行：
+Run this in your terminal:
 
 ```bash
-npx skills add SDLLL/ios-publish-guide
+npx skills add SDLLL/appstore-publisher
 ```
 
-然后在你的项目目录启动 [Claude Code](https://claude.ai/download)：
+Then launch [Claude Code](https://claude.ai/download) in your project directory:
 
 ```bash
 claude
 ```
 
-对它说「帮我发布 App 到 App Store」。Agent 会自动引导完成 asc 安装、认证配置等所有前置步骤。
+Say "publish my app to the App Store". The Agent will automatically guide you through asc installation, authentication setup, and all prerequisites.
 
-> 兼容任何支持 Skills 的 AI Agent：Claude Code、Cursor、Windsurf 等。
-
----
-
-## 它能做什么
-
-一个 Skill 覆盖发布全流程：
-
-| 阶段 | Agent 自动完成的事 |
-|------|-------------------|
-| **前置准备** | 安装 asc CLI、配置 API Key、注册 Bundle ID、获取签名证书 |
-| **构建上传** | xcodebuild archive → 导出 IPA → `asc publish appstore` 上传 |
-| **元数据配置** | 中英双语描述、关键词、年龄分级、Review Notes |
-| **ASO 优化** | 关键词策略、描述撰写规则、本地化优先级（自动安装 [ASO 分析 skill](https://github.com/sickn33/antigravity-awesome-skills)） |
-| **截图自动化** | `asc screenshots run` 自动截图 → `frame` 加设备外框 → `upload` 上传 |
-| **定价设置** | 查询价格点、创建价格计划、管理地区可用性 |
-| **审核避坑** | 4.2/4.3/5.1.1 检查、提交节奏建议、Review Notes 撰写指导 |
-| **提交审核** | `asc validate --strict` 预检 → `asc submit` 提交 → `asc status` 监控 |
-| **终极检查清单** | 构建质量、隐私合规、元数据、功能深度、反同质化逐项确认 |
+> Compatible with any AI Agent that supports Skills: Claude Code, Cursor, Windsurf, etc.
 
 ---
 
-## 发布流程概览
+## What It Does
+
+One Skill covers the entire publishing workflow:
+
+| Stage | What the Agent Does |
+|-------|-------------------|
+| **Prerequisites** | Install asc CLI, configure API Key, register Bundle ID, fetch signing certificates |
+| **Build & Upload** | xcodebuild archive → export IPA → `asc publish appstore` upload |
+| **Metadata** | Bilingual descriptions, keywords, age rating, Review Notes |
+| **ASO Optimization** | Keyword strategy, description writing rules, localization priorities (auto-installs [ASO analysis skill](https://github.com/sickn33/antigravity-awesome-skills)) |
+| **Screenshot Automation** | `asc screenshots run` capture → `frame` device bezels → `upload` to ASC |
+| **Pricing** | Query price points, create price schedules, manage territory availability |
+| **Review Guidelines** | 4.2/4.3/5.1.1 checks, submission pacing advice, Review Notes guidance |
+| **Submission** | `asc validate --strict` preflight → `asc submit` → `asc status` monitoring |
+| **Final Checklist** | Build quality, privacy compliance, metadata, feature depth, anti-spam verification |
+
+---
+
+## Workflow Overview
 
 ```
-配置认证 → 注册 Bundle ID → 构建归档 → 上传 IPA
-    → 配置元数据（双语）→ ASO 优化 → 截图自动化
-    → 定价设置 → 审核合规检查 → 提交审核 → 监控状态
+Configure Auth → Register Bundle ID → Archive Build → Upload IPA
+    → Configure Metadata (bilingual) → ASO Optimization → Screenshot Automation
+    → Pricing Setup → Review Compliance Check → Submit for Review → Monitor Status
 ```
 
-Agent 按顺序执行每个阶段，你只需要在关键节点确认。
+The Agent executes each stage in order. You only need to confirm at key checkpoints.
 
 ---
 
-## 常见问题
+## FAQ
 
 <details>
-<summary><strong>需要提前安装什么吗？</strong></summary>
+<summary><strong>Do I need to install anything beforehand?</strong></summary>
 
-不需要。Skill 里包含了完整的前置准备步骤，Agent 会自动引导你安装 asc CLI、配置 API Key、获取签名证书。你只需要有一个 Apple Developer 账号和 Xcode。
+No. The Skill includes complete prerequisite steps. The Agent will guide you through installing asc CLI, configuring your API Key, and fetching signing certificates. You just need an Apple Developer account and Xcode.
 </details>
 
 <details>
-<summary><strong>支持哪些类型的 App？</strong></summary>
+<summary><strong>What types of apps does this support?</strong></summary>
 
-主要针对纯付费 iOS App（无 IAP、无订阅、无广告、无后端）。如果你的 App 有内购或订阅，流程中的定价和元数据部分可能需要调整。
+Primarily designed for paid iOS apps (no IAP, no subscriptions, no ads, no backend). If your app has in-app purchases or subscriptions, the pricing and metadata sections may need adjustment.
 </details>
 
 <details>
-<summary><strong>截图自动化怎么用？</strong></summary>
+<summary><strong>How does screenshot automation work?</strong></summary>
 
-asc CLI v0.29+ 内置了实验性截图流水线。Agent 会自动编写截图计划（JSON）→ 在模拟器中截图 → 用 [Koubou](https://github.com/nicklama/koubou) 加设备外框 → 上传到 App Store Connect。需要 `pip install koubou==0.14.0`。
+asc CLI v0.29+ includes an experimental screenshot pipeline. The Agent automatically writes a screenshot plan (JSON) → captures from the simulator → frames with [Koubou](https://github.com/nicklama/koubou) device bezels → uploads to App Store Connect. Requires `pip install koubou==0.14.0`.
 </details>
 
 <details>
-<summary><strong>ASO 优化靠谱吗？</strong></summary>
+<summary><strong>Is the ASO optimization reliable?</strong></summary>
 
-Skill 内置了实战验证的 ASO 策略（关键词填充规则、描述撰写模板、本地化优先级等），同时会自动安装专业的 [ASO 分析 skill](https://github.com/sickn33/antigravity-awesome-skills) 提供数据驱动的关键词评分和竞品分析。
+The Skill includes battle-tested ASO strategies (keyword optimization rules, description templates, localization priorities), and also auto-installs the professional [ASO analysis skill](https://github.com/sickn33/antigravity-awesome-skills) for data-driven keyword scoring and competitor analysis.
 </details>
 
 <details>
-<summary><strong>怎么避免审核被拒？</strong></summary>
+<summary><strong>How do I avoid app review rejection?</strong></summary>
 
-Skill 包含完整的审核避坑指南，覆盖最常见的拒审原因（4.2 功能不足、4.3 同质化、2.1 应用完整性、5.1.1 隐私合规），以及 2025-2026 年的新政策变化。提交前 Agent 会自动运行 `asc validate --strict` 进行预检。
+The Skill includes a comprehensive review survival guide covering the most common rejection reasons (4.2 minimum functionality, 4.3 spam/copycat, 2.1 app completeness, 5.1.1 privacy compliance), plus 2025–2026 policy changes. Before submission, the Agent automatically runs `asc validate --strict` for preflight checks.
 </details>
 
 <details>
-<summary><strong>兼容哪些 AI Agent？</strong></summary>
+<summary><strong>Which AI Agents are compatible?</strong></summary>
 
-任何支持 Claude Code Skills 的 AI Agent 都能用，包括 Claude Code、Cursor、Windsurf 等。
+Any AI Agent that supports Claude Code Skills, including Claude Code, Cursor, Windsurf, and more.
 </details>
 
 ---
 
-## 致谢
+## Acknowledgments
 
 [App Store Connect CLI (asc)](https://github.com/rudrankriyam/App-Store-Connect-CLI) · [antigravity-awesome-skills](https://github.com/sickn33/antigravity-awesome-skills) · [claude-code-apple-skills](https://github.com/rshankras/claude-code-apple-skills) · [Koubou](https://github.com/nicklama/koubou)
 
